@@ -60,15 +60,12 @@ export default class SearchDataService {
 
   async retrieveAllISBNs(filterQueryList, campus: string): Promise<Response<string[]>> {
     try {
-      const daoResponse = await this.daoFactory.bookDao.getAllISBNs(
-        filterQueryList,
-        campus
-      );
+      const daoResponse = await this.daoFactory.bookDao.getAllISBNs(filterQueryList, campus);
       if (daoResponse.statusCode !== 200) {
         return daoResponse;
       }
-      
-      const dbResult = daoResponse.object
+
+      const dbResult = daoResponse.object;
       if (dbResult != null && dbResult.length > 0) {
         const resultList = dbResult.flatMap((input) => {
           const result = input.isbn_list;
@@ -79,10 +76,7 @@ export default class SearchDataService {
         return new ServerErrorResponse("dbResult was null for some reason!", 404);
       }
     } catch (error) {
-      return new ServerErrorResponse(
-        `Error trying to retreive all ISBN's: ${error.message}`,
-        500
-      );
+      return new ServerErrorResponse(`Error trying to retreive all ISBN's: ${error.message}`, 500);
     }
   }
 }
